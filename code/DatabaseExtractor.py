@@ -38,6 +38,7 @@ def stats_from_id(player_IDs, needed_stats, standard_values):
             for player in api_id:
                 if item[0] == player[0]:
                     p1_ratings.append(list(player[1:]))
+
                     break
     return p1_ratings
 
