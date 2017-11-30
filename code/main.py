@@ -58,7 +58,8 @@ y_test = y[800:1000]
 # result2 = otherclf.fit(x_train,y_train).predict(x_test)
 
 clf4 = DecisionTreeClassifier()
-result3 = clf4.fit(x_train, y_train).predict(x_test)
+model4 = clf4.fit(x_train, y_train)
+result3 = clf4.fit(x_train, y_train).score(x_train, y_train)
 print(result3)
 # print(y_test)
 
