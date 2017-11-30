@@ -9,9 +9,14 @@ from sklearn import svm
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neural_network import MLPClassifier
 
-
+y = process_output()
 # Read in the data of the match and of the players
 x2 = read_data("Match", "home_player_1")[:1000]
+<<<<<<< HEAD
+p1_rating = stats_from_id(x2, "overall_rating", [100])
+
+print(p1_rating)
+=======
 x3 = read_data("Match", "home_player_2")[:1000]
 x4 = read_data("Match", "home_player_3")[:1000]
 x5 = read_data("Match", "home_player_4")[:1000]
@@ -42,6 +47,7 @@ for i in range(len(x2)):
 
 print(rating)
 y = process_output()
+>>>>>>> c0761ef1630450fa89e04affda211feef3488a50
 
 # split into training and test
 x_train = rating[:800]
@@ -49,6 +55,15 @@ y_train = y[:800]
 x_test = rating[800:1000]
 y_test = y[800:1000]
 
+<<<<<<< HEAD
+# Apply linear regression models [MODELS ARE VERY BAD ATM]
+#algorithm_parameters = "solver='lbfgs', multi_class='multinomial'"
+#clf = OneVsRestClassifier(LinearSVC())
+#result1=clf.fit(x_train, y_train).predict(x_test)
+
+#otherclf= LogisticRegression()
+#result2 = otherclf.fit(x_train,y_train).predict(x_test)
+=======
 # # Apply linear regression models [MODELS ARE VERY BAD ATM]
 # algorithm_parameters = "solver='lbfgs', multi_class='multinomial'"
 # clf = OneVsRestClassifier(LinearSVC())
@@ -62,14 +77,19 @@ model4 = clf4.fit(x_train, y_train)
 result3 = clf4.fit(x_train, y_train).score(x_train, y_train)
 print(result3)
 # print(y_test)
+>>>>>>> c0761ef1630450fa89e04affda211feef3488a50
 
 # print(x_train)
 # clf3 = svm.LinearSVC(multi_class="crammer_singer")
 # clf3p = clf3.fit(x_train, y_train)
 # print(clf3p.predict(x_test))
 # print(x_test[-7:])
+<<<<<<< HEAD
+#print(result1)
+=======
 # print(result1)
 print(y_test)
+>>>>>>> c0761ef1630450fa89e04affda211feef3488a50
 #print(result2)
 
 # mlp = MLPClassifier(solver="lbfgs")
