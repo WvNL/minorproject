@@ -17,7 +17,7 @@ x2 = read_data("Match_DEF", "H_rating1, H_rating2, H_rating3, H_rating4, H_ratin
                             "H_chanceCreationCrossing, H_defencePressure, H_defenceAggression, A_chanceCreationCrossing, A_defencePressure, A_defenceAggression, "
                             "B365H, B365D, B365A")
 
-#x2 = read_data("Match_DEF", "B365H, B365D, B365A, BWH, BWD, BWA, IWH, IWD, IWA, LBH, LBD, LBA")
+# x2 = read_data("Match_DEF", "B365H, B365D, B365A, BWH, BWD, BWA, IWH, IWD, IWA, LBH, LBD, LBA")
 y = process_output()
 
 x = []
@@ -41,7 +41,7 @@ y_train = y1[:16000]
 x_test = x[16000:]
 y_test = y1[16000:]
 
-# bayes, seems good, give 2nd gives constant result
+# bayes, seems good, 2nd gives constant and 2nd best result
 gnb = GaussianNB()
 gnbfit = gnb.fit(x_train, y_train)
 mnb = MultinomialNB().fit(x_train, y_train)
@@ -53,21 +53,21 @@ print(bnb.score(x_test, y_test))
 print(mnb.predict_proba(x_test[:10]))
 
 
-# seems good, gives changing results
-clf = OneVsRestClassifier(LinearSVC())
-result1 = clf.fit(x_train, y_train).score(x_test, y_test)
-print("ovr")
-print(result1)
+# # seems good, gives changing results
+# clf = OneVsRestClassifier(LinearSVC())
+# result1 = clf.fit(x_train, y_train).score(x_test, y_test)
+# print("ovr")
+# print(result1)
 
 # seems good, gives constant result, best atm
-otherclf= LogisticRegression().fit(x_train,y_train)
+otherclf = LogisticRegression().fit(x_train,y_train)
 result2 = otherclf.score(x_test, y_test)
 print("logisticregr")
 print(result2)
 print(otherclf.predict_proba(x_test[:10]))
 print(odds[16000:16010])
 print(y_test[:10])
-
+# print(otherclf.get_params(deep=True))
 
 # seems good, gives close to constant result
 clf4 = DecisionTreeClassifier()
@@ -98,3 +98,29 @@ print(mlp.fit(x_train, y_train).score(x_test, y_test))
 # "H_rating4, H_rating6, H_rating7, H_rating8, H_rating9,  "
 #                             "A_rating2, A_rating3, A_rating4, A_rating5, A_rating6, A_rating7, A_rating8, A_rating11, "
 #                             "H_chanceCreationCrossing, A_chanceCreationCrossing, A_defenceAggression")
+
+# Algorithm to calculate if there is profit to be made
+####
+array = otherclf.predict_proba(x_test[:3000])
+odds = odds[16000:19000]
+result = y_test[:3000]
+calcodds = []
+for i in range(len(array)):
+    calcodds.append(list(array[i]))
+
+profit = 0
+for i in range(len(calcodds)):
+    for j in range(len(calcodds[i])):
+        if 1.03 < calcodds[i][j]*odds[i][j] < 1.15:
+            if j == result[i]:
+                profit += (odds[i][j] - 1)
+
+            if j != result[i]:
+                profit -= 1
+
+print(profit)
+####
+
+# if odds*bwinodds>100:
+#     if correct: result+=1*bwinodds
+#     if not correct: result-=1
