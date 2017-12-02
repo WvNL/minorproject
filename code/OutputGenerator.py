@@ -2,7 +2,7 @@ from DatabaseExtractor import read_data
 
 
 def process_output():
-    data = read_data("Match", "home_team_goal, away_team_goal")
+    data = read_data("Match_DEF", "home_team_goal, away_team_goal")
     new_output = []
     for i in data:
         if i[0] > i[1]:
