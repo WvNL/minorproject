@@ -56,20 +56,29 @@ for i in range(21000):
 print(len(x))
 
 
-#x = StandardScaler().fit_transform(x)
-# split into training and test
-x_train = x[:16000]
-y_train = y1[:16000]
-x_test = x[16000:]
-y_test = y1[16000:]
+# splits the data into training and test sets
+x_train, x_test, y_train, y_test = train_test_split(x, y1, test_size=0.3, shuffle=True )
 
-# bayes, seems good, 2nd gives constant and 2nd best result
-gnb = GaussianNB()
-gnbfit = gnb.fit(x_train, y_train)
-mnb = MultinomialNB().fit(x_train, y_train)
-bnb = BernoulliNB().fit(x_train, y_train)
+#analyse the classes distribution
+length = len(y1)
+count0_perc = (y1.count(0)/length)
+count1_perc = (y1.count(1)/length)
+count2_perc = (y1.count(2)/length)
+class_weight = {0:count0_perc,1:count1_perc,2:count2_perc}
 
 
+#2nd gives constant and 2nd best result
+gaussian_naive_bayes = GaussianNB()
+gaussian_naive_bayes_fit = gaussian_naive_bayes.fit(x_train, y_train)
+multi_naive_bayes = MultinomialNB().fit(x_train, y_train)
+bernoulli_naive_bayes = BernoulliNB().fit(x_train, y_train)
+
+
+print("bayes")
+print(gaussian_naive_bayes_fit.score(x_test, y_test))
+print(multi_naive_bayes.score(x_test, y_test))
+print(bernoulli_naive_bayes.score(x_test, y_test))
+print(multi_naive_bayes.predict_proba(x_test[:10]))
 
 
 #seems good, gives changing results
@@ -83,43 +92,44 @@ bnb = BernoulliNB().fit(x_train, y_train)
 #print("Gradient Boosting")
 #print(gradient_boosting_fit.score(x_test, y_test))
 
-
-clf = AdaBoostClassifier().fit(x_train, y_train)
-result1 = clf.score(x_test, y_test)
-print("some1")
-print(result1)
-
 # seems good, gives constant result, best atm
-otherclf = LogisticRegression().fit(x_train,y_train)
-result2 = otherclf.score(x_test, y_test)
-print("logisticregr")
-print(result2)
+# = LogisticRegression()
+#logistic_regression_fit = logistic_regression.fit(x_train,y_train)
+#print("logisticregr")
+#print(logistic_regression_fit.score(x_test, y_test))
 
-# print(otherclf.get_params(deep=True))
-#
-# # seems good, gives close to constant result
-# clf4 = DecisionTreeClassifier()
-# model4 = clf4.fit(x_train, y_train)
-# result3 = model4.predict(x_test)
-# print("decisiontree")
-# print(model4.score(x_test, y_test))
-#
-# # seems good, gives changing results
-# clf3 = svm.LinearSVC()
-# clf3p = clf3.fit(x_train, y_train)
-# print("linearsvc")
-# print(clf3p.score(x_test, y_test))
-#
-# # seems medium, gives changing results
-# mlp = MLPClassifier()
-# print("mlp")
-# print(mlp.fit(x_train, y_train).score(x_test, y_test))
-# mlp = MLPClassifier()
-# print("mlp")
-# print(mlp.fit(x_train, y_train).score(x_test, y_test))
-# mlp = MLPClassifier()
-# print("mlp")
-# print(mlp.fit(x_train, y_train).score(x_test, y_test))
+# seems good, gives close to constant result
+decision_tree = DecisionTreeClassifier(class_weight=class_weight)
+decision_tree_fit = decision_tree.fit(x_train, y_train)
+decision_tree_prediction = decision_tree.predict(x_test)
+print(confusion_matrix(y_test, decision_tree_prediction))
+print("decisiontree")
+print(decision_tree_fit.score(x_test, y_test))
+
+# seems good, gives changing results
+linear_svc = svm.LinearSVC(class_weight=class_weight)
+linear_svc_fit = linear_svc.fit(x_train, y_train)
+print("linearsvc")
+print(linear_svc_fit.score(x_test, y_test))
+
+# seems good
+random_forest = RandomForestClassifier(class_weight=class_weight)
+random_forest_fit = random_forest.fit(x_train, y_train)
+print("randomforest")
+print(random_forest_fit.score(x_test, y_test))
+print(random_forest.predict(x_test))
+
+# seems medium, gives changing results
+mlp = MLPClassifier()
+print("mlp")
+print(mlp.fit(x_train, y_train).score(x_test, y_test))
+mlp = MLPClassifier()
+print("mlp")
+print(mlp.fit(x_train, y_train).score(x_test, y_test))
+mlp = MLPClassifier()
+print("mlp")
+print(mlp.fit(x_train, y_train).score(x_test, y_test))
+
 
 # weirdly enough, theoretically only these matter:
 # "H_rating4, H_rating6, H_rating7, H_rating8, H_rating9,  "
@@ -128,7 +138,7 @@ print(result2)
 
 # Algorithm to calculate if there is profit to be made
 ####
-array = otherclf.predict_proba(x_test[:3000])
+array = decision_tree.predict_proba(x_test[:3000])
 odds = odds[16000:19000]
 result = y_test[:3000]
 calcodds = []
