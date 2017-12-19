@@ -42,26 +42,4 @@ def stats_from_id(player_IDs, needed_stats, standard_values):
                     break
     return p1_ratings
 
-# Some old code that might be useful sometime
-
-# def stat_from_id(player_IDs, needed_stat, standard_value):
-#     api_id = read_data("Player_Attributes", "player_api_id, " + needed_stat)
-#
-#     # Make sure the overall rating of every player is available, if the player ID is NONE, a custom value is parsed in.
-#     p1_rating = []
-#     #for every player 1 of a match
-#     for item in player_IDs:
-#         # Parse in some value if None, else parse in the player strength
-#         if item[0] is None:
-#             p1_rating.append([standard_value])
-#         else:
-#             for i in range(len(api_id)):
-#
-#                 if item[0] == api_id[i][0]:
-#                     #print("found!")
-#                     p1_rating.append([api_id[i][1]])
-#
-#                     break
-#     return p1_rating
-
 
