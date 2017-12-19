@@ -37,7 +37,7 @@ x2 = read_data("Match_DEF", "H_rating1, H_rating2, H_rating3, H_rating4, H_ratin
                             "H_chanceCreationCrossing, H_defencePressure, H_defenceAggression, A_chanceCreationCrossing, A_defencePressure, A_defenceAggression, "
                             "B365H, B365D, B365A")
 
-# x2 = read_data("Match_DEF", "B365H, B365D, B365A, BWH, BWD, BWA, IWH, IWD, IWA, LBH, LBD, LBA")
+# workin bttin sits = "B365H, B365D, B365A, BWH, BWD, BWA, IWH, IWD, IWA, LBH, LBD, LBA")
 y = process_output()
 
 x = []
@@ -78,10 +78,10 @@ bnb = BernoulliNB().fit(x_train, y_train)
 #print("One vs. Rest")
 #print(clf_fit)
 
-#gradient_boosting = GradientBoostingClassifier()
-#gradient_boosting_fit = GradientBoostingClassifier.fit(x_train,y_train)
-#print("Gradient Boosting")
-#print(gradient_boosting_fit.score(x_test, y_test))
+
+gradient_boosting_fit = GradientBoostingClassifier().fit(x_train, y_train)
+print("Gradient Boosting")
+print(gradient_boosting_fit.score(x_test, y_test))
 
 
 clf = AdaBoostClassifier().fit(x_train, y_train)
@@ -128,20 +128,33 @@ print(result2)
 
 # Algorithm to calculate if there is profit to be made
 ####
-array = otherclf.predict_proba(x_test[:3000])
+calcodds = gradient_boosting_fit.predict_proba(x_test[:3000])
 odds = odds[16000:19000]
 result = y_test[:3000]
-calcodds = []
 
-for i in range(len(array)):
-    calcodds.append(list(array[i]))
+print(calcodds)
 matches = 0
 profit = 0
 wrong = 0
 correct = 0
 for i in range(len(calcodds)):
     for j in range(len(calcodds[i])):
-        if 1.03 < calcodds[i][j]*odds[i][j] < 1.15 and j == 0:
+        if 0.99 < calcodds[i][j]*odds[i][j] < 1.20 and j==2 :
+            matches += 1
+
+            if j == result[i]:
+                profit += (odds[i][j] - 1)
+                correct += 1
+
+            if j != result[i]:
+                profit -= 1
+                wrong += 1
+
+calcodds = otherclf.predict_proba(x_test[:3000])
+
+for i in range(len(calcodds)):
+    for j in range(len(calcodds[i])):
+        if 1.03 < calcodds[i][j]*odds[i][j] < 1.15 and j==0:
             matches += 1
 
             if j == result[i]:
@@ -154,7 +167,7 @@ for i in range(len(calcodds)):
 
 print(profit, "in ", matches, "matches")
 print("profit per match:" + str(profit/matches))
-print(wrong, "vs", correct)
+print(correct, "vs", wrong)
 ####
 # Above is basically this
 # if odds*bwinodds>100 percent:
