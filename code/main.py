@@ -7,6 +7,21 @@ from sklearn import svm
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.naive_bayes import *
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.metrics import confusion_matrix
+from sklearn.decomposition import PCA
+from sklearn.model_selection import train_test_split
+from sklearn.utils import compute_class_weight
+from sklearn.metrics import roc_curve, auc
+from sklearn.preprocessing import label_binarize
+from scipy import interp
+
+
+
+
+
+
+
 
 
 # Read in the data of the match and of the players
@@ -35,52 +50,68 @@ for i in range(21000):
         odds.append((x2[i][-3:]))
 print(len(x))
 
-# split into training and test
-x_train = x[:16000]
-y_train = y1[:16000]
-x_test = x[16000:]
-y_test = y1[16000:]
+# splits the data into training and test sets
+x_train, x_test, y_train, y_test = train_test_split(x, y1, test_size=0.3, shuffle=True )
 
-# bayes, seems good, 2nd gives constant and 2nd best result
-gnb = GaussianNB()
-gnbfit = gnb.fit(x_train, y_train)
-mnb = MultinomialNB().fit(x_train, y_train)
-bnb = BernoulliNB().fit(x_train, y_train)
+#analyse the classes distribution
+length = len(y1)
+count0_perc = (y1.count(0)/length)
+count1_perc = (y1.count(1)/length)
+count2_perc = (y1.count(2)/length)
+class_weight = {0:count0_perc,1:count1_perc,2:count2_perc}
+
+
+#2nd gives constant and 2nd best result
+gaussian_naive_bayes = GaussianNB()
+gaussian_naive_bayes_fit = gaussian_naive_bayes.fit(x_train, y_train)
+multi_naive_bayes = MultinomialNB().fit(x_train, y_train)
+bernoulli_naive_bayes = BernoulliNB().fit(x_train, y_train)
 print("bayes")
-print(gnbfit.score(x_test, y_test))
-print(mnb.score(x_test, y_test))
-print(bnb.score(x_test, y_test))
-print(mnb.predict_proba(x_test[:10]))
+print(gaussian_naive_bayes_fit.score(x_test, y_test))
+print(multi_naive_bayes.score(x_test, y_test))
+print(bernoulli_naive_bayes.score(x_test, y_test))
+print(multi_naive_bayes.predict_proba(x_test[:10]))
 
 
-# # seems good, gives changing results
-# clf = OneVsRestClassifier(LinearSVC())
-# result1 = clf.fit(x_train, y_train).score(x_test, y_test)
-# print("ovr")
-# print(result1)
+#seems good, gives changing results
+#clf = OneVsRestClassifier(LinearSVC(class_weight=class_weight))
+#clf_fit = clf.fit(x_train, y_train).score(x_test, y_test)
+#print("One vs. Rest")
+#print(clf_fit)
+
+#gradient_boosting = GradientBoostingClassifier()
+#gradient_boosting_fit = GradientBoostingClassifier.fit(x_train,y_train)
+#print("Gradient Boosting")
+#print(gradient_boosting_fit.score(x_test, y_test))
+
+
 
 # seems good, gives constant result, best atm
-otherclf = LogisticRegression().fit(x_train,y_train)
-result2 = otherclf.score(x_test, y_test)
-print("logisticregr")
-print(result2)
-print(otherclf.predict_proba(x_test[:10]))
-print(odds[16000:16010])
-print(y_test[:10])
-# print(otherclf.get_params(deep=True))
+# = LogisticRegression()
+#logistic_regression_fit = logistic_regression.fit(x_train,y_train)
+#print("logisticregr")
+#print(logistic_regression_fit.score(x_test, y_test))
 
 # seems good, gives close to constant result
-clf4 = DecisionTreeClassifier()
-model4 = clf4.fit(x_train, y_train)
-result3 = model4.predict(x_test)
+decision_tree = DecisionTreeClassifier(class_weight=class_weight)
+decision_tree_fit = decision_tree.fit(x_train, y_train)
+decision_tree_prediction = decision_tree.predict(x_test)
+print(confusion_matrix(y_test, decision_tree_prediction))
 print("decisiontree")
-print(model4.score(x_test, y_test))
+print(decision_tree_fit.score(x_test, y_test))
 
 # seems good, gives changing results
-clf3 = svm.LinearSVC()
-clf3p = clf3.fit(x_train, y_train)
+linear_svc = svm.LinearSVC(class_weight=class_weight)
+linear_svc_fit = linear_svc.fit(x_train, y_train)
 print("linearsvc")
-print(clf3p.score(x_test, y_test))
+print(linear_svc_fit.score(x_test, y_test))
+
+# seems good
+random_forest = RandomForestClassifier(class_weight=class_weight)
+random_forest_fit = random_forest.fit(x_train, y_train)
+print("randomforest")
+print(random_forest_fit.score(x_test, y_test))
+print(random_forest.predict(x_test))
 
 # seems medium, gives changing results
 mlp = MLPClassifier()
@@ -94,6 +125,8 @@ print("mlp")
 print(mlp.fit(x_train, y_train).score(x_test, y_test))
 
 
+
+
 # weirdly enough, theoretically only these matter:
 # "H_rating4, H_rating6, H_rating7, H_rating8, H_rating9,  "
 #                             "A_rating2, A_rating3, A_rating4, A_rating5, A_rating6, A_rating7, A_rating8, A_rating11, "
@@ -101,7 +134,7 @@ print(mlp.fit(x_train, y_train).score(x_test, y_test))
 
 # Algorithm to calculate if there is profit to be made
 ####
-array = otherclf.predict_proba(x_test[:3000])
+array = decision_tree.predict_proba(x_test[:3000])
 odds = odds[16000:19000]
 result = y_test[:3000]
 calcodds = []
