@@ -138,10 +138,33 @@ matches = 0
 profit = 0
 wrong = 0
 correct = 0
+lower_bound = 0.7
+upper_bound = 0.75
+profit_ranges = []
+
+#profit optimalization calc:
+for k in range(15):
+    range_profit = 0
+    match_count = 0
+    for i in range(len(calcodds2)):
+        for j in range(len(calcodds2[i])):
+            if lower_bound < calcodds2[i][j]*return_multiplier[i][j] < upper_bound:
+                match_count+=1
+                if j == result[i]:
+                    range_profit += (return_multiplier[i][j] - 1)
+
+                if j != result[i]:
+                    range_profit -= 1
+    profit_ranges.append([round(lower_bound, 2), round(range_profit/match_count, 5)])
+    lower_bound+=0.05
+    upper_bound+=0.05
+    print(profit_ranges)
+print(profit_ranges)
+
 for i in range(len(calcodds1)):
     for j in range(len(calcodds1[i])):
-        if (1.05 < calcodds1[i][j]*return_multiplier[i][j] < 1.20 and j == (0 or 2) and 2.5 < return_multiplier[i][j] < 5) or \
-                (1.03 < calcodds2[i][j]*return_multiplier[i][j] < 1.15 and j == 3 and 3 < return_multiplier[i][j] < 10):
+        if (1.05 < calcodds1[i][j]*return_multiplier[i][j] < 1.20 and (j == 0 or j == 2) and 2.5 < return_multiplier[i][j] < 5) or \
+                (1.03 < calcodds2[i][j]*return_multiplier[i][j] < 1.15 and j == 2 and 3 < return_multiplier[i][j] < 10):
             matches += 1
 
             if j == result[i]:
