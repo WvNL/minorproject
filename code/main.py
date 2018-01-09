@@ -86,7 +86,7 @@ print(gradient_boosting_fit.score(x_test, y_test))
 
 clf = AdaBoostClassifier().fit(x_train, y_train)
 result1 = clf.score(x_test, y_test)
-print("some1")
+print("Adaboost")
 print(result1)
 
 # seems good, gives constant result, best atm
@@ -141,7 +141,7 @@ correct = 0
 for i in range(len(calcodds1)):
     for j in range(len(calcodds1[i])):
         if (1.05 < calcodds1[i][j]*return_multiplier[i][j] < 1.20 and j == (0 or 2) and 2.5 < return_multiplier[i][j] < 5) or \
-                (1.03 < calcodds2[i][j]*return_multiplier[i][j] < 1.15 and j == 0 and 3 < return_multiplier[i][j] < 10):
+                (1.03 < calcodds2[i][j]*return_multiplier[i][j] < 1.15 and j == 3 and 3 < return_multiplier[i][j] < 10):
             matches += 1
 
             if j == result[i]:
