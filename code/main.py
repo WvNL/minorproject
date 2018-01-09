@@ -1,4 +1,5 @@
 from DatabaseExtractor import *
+from Profit_optimization import *
 from sklearn.multiclass import OneVsRestClassifier
 from OutputGenerator import *
 from sklearn.linear_model import LogisticRegression
@@ -128,8 +129,8 @@ print(result2)
 
 # Algorithm to calculate if there is profit to be made
 ####
-calcodds1 = gradient_boosting_fit.predict_proba(x_test[:3400])
-calcodds2 = otherclf.predict_proba(x_test[:3400])
+calcodds1 = otherclf.predict_proba(x_test[:3400])
+calcodds2 = clf.predict_proba(x_test[:3400])
 return_multiplier = return_multiplier[16000:19400]
 result = y_test[:3400]
 plot_stats = []
@@ -138,29 +139,11 @@ matches = 0
 profit = 0
 wrong = 0
 correct = 0
-lower_bound = 0.7
-upper_bound = 0.75
-profit_ranges = []
 
-#profit optimalization calc:
-for k in range(15):
-    range_profit = 0
-    match_count = 0
-    for i in range(len(calcodds2)):
-        for j in range(len(calcodds2[i])):
-            if lower_bound < calcodds2[i][j]*return_multiplier[i][j] < upper_bound:
-                match_count+=1
-                if j == result[i]:
-                    range_profit += (return_multiplier[i][j] - 1)
-
-                if j != result[i]:
-                    range_profit -= 1
-    profit_ranges.append([round(lower_bound, 2), round(range_profit/match_count, 5)])
-    lower_bound+=0.05
-    upper_bound+=0.05
-    print(profit_ranges)
-print(profit_ranges)
-
+# profit visualization
+expected_return_pm(calcodds1, return_multiplier, result)
+expected_return_total(calcodds1, return_multiplier, result)
+multiplier_return(calcodds1, return_multiplier, result)
 for i in range(len(calcodds1)):
     for j in range(len(calcodds1[i])):
         if (1.05 < calcodds1[i][j]*return_multiplier[i][j] < 1.20 and (j == 0 or j == 2) and 2.5 < return_multiplier[i][j] < 5) or \
@@ -175,27 +158,8 @@ for i in range(len(calcodds1)):
                 profit -= 1
                 wrong += 1
 
-# for i in range(len(calcodds2)):
-#     for j in range(len(calcodds2[i])):
-#         if 1.03 < calcodds2[i][j]*return_multiplier[i][j] < 1.15 and j == 0 and 3 < return_multiplier[i][j] < 10:
-#             matches += 1
-#
-#             if j == result[i]:
-#                 profit += (return_multiplier[i][j] - 1)
-#                 correct += 1
-#                 plot_stats.append([return_multiplier[i][j], 1])
-#
-#             if j != result[i]:
-#                 profit -= 1
-#                 wrong += 1
-#                 plot_stats.append([return_multiplier[i][j], 0])
 
 print(profit, "in ", matches, "matches")
 print("average profit per match:" + str(profit/matches))
 print(correct, "vs", wrong)
 print(plot_stats)
-####
-# Above is basically this
-# if odds*bwinodds>100 percent:
-#     if correct: result+=1*bwinodds
-#     if not correct: result-=1
