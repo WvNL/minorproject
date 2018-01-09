@@ -37,11 +37,11 @@ x2 = read_data("Match_DEF", "H_rating1, H_rating2, H_rating3, H_rating4, H_ratin
                             "H_chanceCreationCrossing, H_defencePressure, H_defenceAggression, A_chanceCreationCrossing, A_defencePressure, A_defenceAggression, "
                             "B365H, B365D, B365A")
 
-# x2 = read_data("Match_DEF", "B365H, B365D, B365A, BWH, BWD, BWA, IWH, IWD, IWA, LBH, LBD, LBA")
+# workin bttin sits = "B365H, B365D, B365A, BWH, BWD, BWA, IWH, IWD, IWA, LBH, LBD, LBA")
 y = process_output()
 
 x = []
-odds = []
+return_multiplier = []
 y1 = []
 
 for i in range(21000):
@@ -52,7 +52,7 @@ for i in range(21000):
     if not none_present:
         x.append(x2[i])
         y1.append(y[i])
-        odds.append((x2[i][-3:]))
+        return_multiplier.append((x2[i][-3:]))
 print(len(x))
 
 
@@ -78,10 +78,10 @@ bnb = BernoulliNB().fit(x_train, y_train)
 #print("One vs. Rest")
 #print(clf_fit)
 
-#gradient_boosting = GradientBoostingClassifier()
-#gradient_boosting_fit = GradientBoostingClassifier.fit(x_train,y_train)
-#print("Gradient Boosting")
-#print(gradient_boosting_fit.score(x_test, y_test))
+
+gradient_boosting_fit = GradientBoostingClassifier().fit(x_train, y_train)
+print("Gradient Boosting")
+print(gradient_boosting_fit.score(x_test, y_test))
 
 
 clf = AdaBoostClassifier().fit(x_train, y_train)
@@ -128,33 +128,49 @@ print(result2)
 
 # Algorithm to calculate if there is profit to be made
 ####
-array = otherclf.predict_proba(x_test[:3000])
-odds = odds[16000:19000]
-result = y_test[:3000]
-calcodds = []
+calcodds1 = gradient_boosting_fit.predict_proba(x_test[:3400])
+calcodds2 = otherclf.predict_proba(x_test[:3400])
+return_multiplier = return_multiplier[16000:19400]
+result = y_test[:3400]
+plot_stats = []
 
-for i in range(len(array)):
-    calcodds.append(list(array[i]))
 matches = 0
 profit = 0
 wrong = 0
 correct = 0
-for i in range(len(calcodds)):
-    for j in range(len(calcodds[i])):
-        if 1.03 < calcodds[i][j]*odds[i][j] < 1.15 and j == 0:
+for i in range(len(calcodds1)):
+    for j in range(len(calcodds1[i])):
+        if (1.05 < calcodds1[i][j]*return_multiplier[i][j] < 1.20 and j == (0 or 2) and 2.5 < return_multiplier[i][j] < 5) or \
+                (1.03 < calcodds2[i][j]*return_multiplier[i][j] < 1.15 and j == 0 and 3 < return_multiplier[i][j] < 10):
             matches += 1
 
             if j == result[i]:
-                profit += (odds[i][j] - 1)
+                profit += (return_multiplier[i][j] - 1)
                 correct += 1
 
             if j != result[i]:
                 profit -= 1
                 wrong += 1
 
+# for i in range(len(calcodds2)):
+#     for j in range(len(calcodds2[i])):
+#         if 1.03 < calcodds2[i][j]*return_multiplier[i][j] < 1.15 and j == 0 and 3 < return_multiplier[i][j] < 10:
+#             matches += 1
+#
+#             if j == result[i]:
+#                 profit += (return_multiplier[i][j] - 1)
+#                 correct += 1
+#                 plot_stats.append([return_multiplier[i][j], 1])
+#
+#             if j != result[i]:
+#                 profit -= 1
+#                 wrong += 1
+#                 plot_stats.append([return_multiplier[i][j], 0])
+
 print(profit, "in ", matches, "matches")
-print("profit per match:" + str(profit/matches))
-print(wrong, "vs", correct)
+print("average profit per match:" + str(profit/matches))
+print(correct, "vs", wrong)
+print(plot_stats)
 ####
 # Above is basically this
 # if odds*bwinodds>100 percent:

@@ -103,7 +103,6 @@ logistic_regression_fit = logistic_regression.fit(x_train,y_train)
 print("Logistic Regression")
 print(logistic_regression_fit.score(x_test, y_test))
 
-# seems good, gives close to constant result
 decision_tree = DecisionTreeClassifier(class_weight=class_weight)
 decision_tree_fit = decision_tree.fit(x_train, y_train)
 decision_tree_prediction = decision_tree.predict(x_test)
@@ -141,7 +140,7 @@ print(mlp.fit(x_train, y_train).score(x_test, y_test))
 
 # Algorithm to calculate if there is profit to be made
 ####
-calcodds = logistic_regression_fit.predict_proba(x_test[:3000])
+calcodds = ada_classifier.predict_proba(x_test[:3000])
 odds = []
 for i in range(3000):
     odds.append(x_test[i][-3:])
@@ -152,17 +151,18 @@ profit = 0
 wrong = 0
 correct = 0
 for i in range(len(calcodds)):
-    for j in range(len(calcodds[i])):
-        if 1.1 < calcodds[i][j]*odds[i][j]:
-            matches += 1
 
-            if j == result[i]:
-                profit += (odds[i][j] - 1)
-                correct += 1
+   for j in range(len(calcodds[i])):
+       if 1.03 < calcodds[i][j]*odds[i][j] < 1.15 and j == 0:
+           matches += 1
 
-            if j != result[i]:
-                profit -= 1
-                wrong += 1
+           if j == result[i]:
+               profit += (odds[i][j] - 1)
+               correct += 1
+
+           if j != result[i]:
+               profit -= 1
+               wrong += 1
 
 print(profit, "in ", matches, "matches")
 print("profit per match:" + str(profit/matches))
