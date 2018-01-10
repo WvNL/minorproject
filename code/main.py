@@ -85,14 +85,14 @@ print("Gradient Boosting")
 print(gradient_boosting_fit.score(x_test, y_test))
 
 
-clf = AdaBoostClassifier().fit(x_train, y_train)
-result1 = clf.score(x_test, y_test)
+adaboosting_fit = AdaBoostClassifier().fit(x_train, y_train)
+result1 = adaboosting_fit.score(x_test, y_test)
 print("Adaboost")
 print(result1)
 
 # seems good, gives constant result, best atm
-otherclf = LogisticRegression().fit(x_train,y_train)
-result2 = otherclf.score(x_test, y_test)
+logisticreg_fit = LogisticRegression().fit(x_train,y_train)
+result2 = logisticreg_fit.score(x_test, y_test)
 print("logisticregr")
 print(result2)
 
@@ -129,8 +129,8 @@ print(result2)
 
 # Algorithm to calculate if there is profit to be made
 ####
-calcodds1 = otherclf.predict_proba(x_test[:3400])
-calcodds2 = clf.predict_proba(x_test[:3400])
+calcodds1 = gradient_boosting_fit.predict_proba(x_test[:3400])
+calcodds2 = logisticreg_fit.predict_proba(x_test[:3400])
 return_multiplier = return_multiplier[16000:19400]
 result = y_test[:3400]
 plot_stats = []
@@ -143,11 +143,14 @@ correct = 0
 # profit visualization
 expected_return_pm(calcodds1, return_multiplier, result)
 expected_return_total(calcodds1, return_multiplier, result)
-multiplier_return(calcodds1, return_multiplier, result)
+multiplier_return_average(calcodds1, return_multiplier, result)
+multiplier_return_total(calcodds1, return_multiplier, result)
+
 for i in range(len(calcodds1)):
     for j in range(len(calcodds1[i])):
-        if (1.05 < calcodds1[i][j]*return_multiplier[i][j] < 1.20 and (j == 0 or j == 2) and 2.5 < return_multiplier[i][j] < 5) or \
-                (1.03 < calcodds2[i][j]*return_multiplier[i][j] < 1.15 and j == 2 and 3 < return_multiplier[i][j] < 10):
+
+        if (1.05 < calcodds1[i][j]*return_multiplier[i][j] < 1.20 and (j == 0 or j == 2) and 2 < return_multiplier[i][j] < 4) or \
+                (1.05 < calcodds2[i][j]*return_multiplier[i][j] < 1.15 and (j == 0 or j == 2) and 1.4 < return_multiplier[i][j]):
             matches += 1
 
             if j == result[i]:
@@ -163,3 +166,4 @@ print(profit, "in ", matches, "matches")
 print("average profit per match:" + str(profit/matches))
 print(correct, "vs", wrong)
 print(plot_stats)
+print(return_multiplier)
