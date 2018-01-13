@@ -1,5 +1,6 @@
 from DatabaseExtractor import *
 from Profit_optimization import *
+from Scraper import *
 from sklearn.multiclass import OneVsRestClassifier
 from OutputGenerator import *
 from sklearn.linear_model import LogisticRegression
@@ -128,12 +129,12 @@ print(result2)
 #                             "H_chanceCreationCrossing, A_chanceCreationCrossing, A_defenceAggression")
 
 # Algorithm to calculate if there is profit to be made
-####
+###
 calcodds1 = gradient_boosting_fit.predict_proba(x_test[:3400])
 calcodds2 = logisticreg_fit.predict_proba(x_test[:3400])
 return_multiplier = return_multiplier[16000:19400]
 result = y_test[:3400]
-plot_stats = []
+
 
 matches = 0
 profit = 0
@@ -146,24 +147,4 @@ expected_return_total(calcodds1, return_multiplier, result)
 multiplier_return_average(calcodds1, return_multiplier, result)
 multiplier_return_total(calcodds1, return_multiplier, result)
 
-for i in range(len(calcodds1)):
-    for j in range(len(calcodds1[i])):
-
-        if (1.05 < calcodds1[i][j]*return_multiplier[i][j] < 1.20 and (j == 0 or j == 2) and 2 < return_multiplier[i][j] < 4) or \
-                (1.05 < calcodds2[i][j]*return_multiplier[i][j] < 1.15 and (j == 0 or j == 2) and 1.4 < return_multiplier[i][j]):
-            matches += 1
-
-            if j == result[i]:
-                profit += (return_multiplier[i][j] - 1)
-                correct += 1
-
-            if j != result[i]:
-                profit -= 1
-                wrong += 1
-
-
-print(profit, "in ", matches, "matches")
-print("average profit per match:" + str(profit/matches))
-print(correct, "vs", wrong)
-print(plot_stats)
-print(return_multiplier)
+profit_calculator(calcodds1, calcodds2, return_multiplier, result)

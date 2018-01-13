@@ -2,6 +2,31 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+def profit_calculator(predicted_odds1, predicted_odds_2, return_multiplier, result):
+    matches = 0
+    profit = 0
+    wrong = 0
+    correct = 0
+    for i in range(len(predicted_odds1)):
+        for j in range(len(predicted_odds1[i])):
+
+            if (1.05 < predicted_odds1[i][j] * return_multiplier[i][j] < 1.20 and (j == 0 or j == 2) and 2 < return_multiplier[i][j] < 4) or \
+                    (1.05 < predicted_odds_2[i][j] * return_multiplier[i][j] < 1.15 and (j == 0 or j == 2) and 1.4 < return_multiplier[i][j]):
+                matches += 1
+
+                if j == result[i]:
+                    profit += (return_multiplier[i][j] - 1)
+                    correct += 1
+
+                if j != result[i]:
+                    profit -= 1
+                    wrong += 1
+
+    print(profit, "in ", matches, "matches")
+    print("average profit per match:" + str(profit / matches))
+    print(correct, "vs", wrong)
+
+
 # Average profit per range (so relative profit)
 def expected_return_pm(predicted_odds, return_multiplier, result):
     lower_bound = 0.7
@@ -170,7 +195,8 @@ def multiplier_return_total(predicted_odds, return_multiplier, result):
         at_count = 0
         for i in range(len(predicted_odds)):
             for j in range(len(predicted_odds[i])):
-                if lower_bound <= return_multiplier[i][j] < upper_bound and 1 < predicted_odds[i][j] * return_multiplier[i][j] <1.2:
+                if lower_bound <= return_multiplier[i][j] < upper_bound and 1 < predicted_odds[i][j] * \
+                        return_multiplier[i][j] < 1.2:
 
                     match_count += 1
                     if j == result[i]:
@@ -243,7 +269,8 @@ def multiplier_return_average(predicted_odds, return_multiplier, result):
             upper_bound += 0.3
         for i in range(len(predicted_odds)):
             for j in range(len(predicted_odds[i])):
-                if lower_bound <= return_multiplier[i][j] < upper_bound and 1 < predicted_odds[i][j] * return_multiplier[i][j]:
+                if lower_bound <= return_multiplier[i][j] < upper_bound and 1 < predicted_odds[i][j] * \
+                        return_multiplier[i][j]:
                     match_count += 1
                     if j == result[i]:
                         range_profit += (return_multiplier[i][j] - 1)
