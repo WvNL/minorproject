@@ -1,5 +1,6 @@
 import urllib.request
 import bs4
+import time
 
 
 def coming_matches():
@@ -16,6 +17,7 @@ def coming_matches():
         stats.append(int(str(player_stat.span).split("label p")[1].split("""">""")[0]))
         stats = stats[:11]
 
+    time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/246?v=18&e=158967&set=true"
     away = urllib.request.urlopen(url).read()
@@ -45,6 +47,7 @@ def coming_matches():
 
     all_stats.append(stats)
 
+    time.sleep(0.5)
     # Fc utrecht -az
     stats = []
     url = "https://sofifa.com/team/1903"
@@ -56,7 +59,7 @@ def coming_matches():
     for player_stat in player_stats:
         stats.append(int(str(player_stat.span).split("label p")[1].split("""">""")[0]))
         stats = stats[:11]
-
+    time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/1906"
     away = urllib.request.urlopen(url).read()
@@ -76,7 +79,7 @@ def coming_matches():
     stats.append(int(str(away_team_attributes[8]).split("""float-right">""")[1][0:2]))
     stats.append(int(str(away_team_attributes[11]).split("""float-right">""")[1][0:2]))
     stats.append(int(str(away_team_attributes[12]).split("""float-right">""")[1][0:2]))
-
+    time.sleep(0.5)
     # betting site odds
 
     stats.append(2.51)
@@ -97,7 +100,7 @@ def coming_matches():
     for player_stat in player_stats:
         stats.append(int(str(player_stat.span).split("label p")[1].split("""">""")[0]))
         stats = stats[:11]
-
+    time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/1908"
     away = urllib.request.urlopen(url).read()
@@ -126,7 +129,7 @@ def coming_matches():
     stats.append("Roda-Twente")
 
     all_stats.append(stats)
-
+    time.sleep(0.5)
     # Zwolle-NAC
     stats = []
     url = "https://sofifa.com/team/1914"
@@ -138,7 +141,7 @@ def coming_matches():
     for player_stat in player_stats:
         stats.append(int(str(player_stat.span).split("label p")[1].split("""">""")[0]))
         stats = stats[:11]
-
+    time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/1904"
     away = urllib.request.urlopen(url).read()
@@ -167,7 +170,7 @@ def coming_matches():
     stats.append("zwolle-nac")
 
     all_stats.append(stats)
-
+    time.sleep(0.5)
     # ADO-VVV
     stats = []
     url = "https://sofifa.com/team/650"
@@ -179,7 +182,7 @@ def coming_matches():
     for player_stat in player_stats:
         stats.append(int(str(player_stat.span).split("label p")[1].split("""">""")[0]))
         stats = stats[:11]
-
+    time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/100651"
     away = urllib.request.urlopen(url).read()
@@ -208,7 +211,7 @@ def coming_matches():
     stats.append("ADO-Venlo")
 
     all_stats.append(stats)
-
+    time.sleep(0.5)
     # Vitesse-Heerenveen
     stats = []
     url = "https://sofifa.com/team/1909"
@@ -220,7 +223,7 @@ def coming_matches():
     for player_stat in player_stats:
         stats.append(int(str(player_stat.span).split("label p")[1].split("""">""")[0]))
         stats = stats[:11]
-
+    time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/1913"
     away = urllib.request.urlopen(url).read()
@@ -249,7 +252,7 @@ def coming_matches():
     stats.append("Vitesse-heerenveen")
 
     all_stats.append(stats)
-
+    time.sleep(0.5)
     # sparta-excelsior
     stats = []
     url = "https://sofifa.com/team/100646"
@@ -261,7 +264,7 @@ def coming_matches():
     for player_stat in player_stats:
         stats.append(int(str(player_stat.span).split("label p")[1].split("""">""")[0]))
         stats = stats[:11]
-
+    time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/1971"
     away = urllib.request.urlopen(url).read()
@@ -290,7 +293,7 @@ def coming_matches():
     stats.append("Sparta-Excelsior")
 
     all_stats.append(stats)
-
+    time.sleep(0.5)
     # willem2-Groningen
     stats = []
     url = "https://sofifa.com/team/1907"
@@ -302,7 +305,7 @@ def coming_matches():
     for player_stat in player_stats:
         stats.append(int(str(player_stat.span).split("label p")[1].split("""">""")[0]))
         stats = stats[:11]
-
+    time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/1915"
     away = urllib.request.urlopen(url).read()
@@ -331,7 +334,7 @@ def coming_matches():
     stats.append("Willem-Groningen")
 
     all_stats.append(stats)
-
+    time.sleep(0.5)
     # Heracles-psv
     stats = []
     url = "https://sofifa.com/team/100634"
@@ -343,7 +346,7 @@ def coming_matches():
     for player_stat in player_stats:
         stats.append(int(str(player_stat.span).split("label p")[1].split("""">""")[0]))
         stats = stats[:11]
-
+    time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/247"
     away = urllib.request.urlopen(url).read()
@@ -366,9 +369,9 @@ def coming_matches():
 
     # betting site odds
 
-    stats.append(1.6)
-    stats.append(4.1)
-    stats.append(5.21)
+    stats.append(7.73)
+    stats.append(5.26)
+    stats.append(1.35)
     stats.append("Heracles-psv")
 
     all_stats.append(stats)

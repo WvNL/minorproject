@@ -43,7 +43,6 @@ x2 = read_data("Match_DEF", "H_rating1, H_rating2, H_rating3, H_rating4, H_ratin
 y = process_output()
 
 x = []
-return_multiplier = []
 y1 = []
 
 for i in range(21000):
@@ -54,16 +53,12 @@ for i in range(21000):
     if not none_present:
         x.append(x2[i])
         y1.append(y[i])
-        return_multiplier.append((x2[i][-3:]))
 print(len(x))
 
 
 #x = StandardScaler().fit_transform(x)
 # split into training and test
-x_train = x[:16000]
-y_train = y1[:16000]
-x_test = x[16000:]
-y_test = y1[16000:]
+x_train, x_test, y_train, y_test = train_test_split(x, y1, test_size=0.15, shuffle=True)
 
 # bayes, seems good, 2nd gives constant and 2nd best result
 gnb = GaussianNB()
@@ -130,10 +125,13 @@ print(result2)
 
 # Algorithm to calculate if there is profit to be made
 ###
-calcodds1 = gradient_boosting_fit.predict_proba(x_test[:3400])
-calcodds2 = logisticreg_fit.predict_proba(x_test[:3400])
-return_multiplier = return_multiplier[16000:19400]
-result = y_test[:3400]
+calcodds1 = logisticreg_fit.predict_proba(x_test[:2800])
+calcodds2 = gradient_boosting_fit.predict_proba(x_test[:2800])
+result = y_test[:2800]
+
+return_multiplier = []
+for i in range(2800):
+    return_multiplier.append(x_test[i][-3:])
 
 
 matches = 0

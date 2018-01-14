@@ -10,8 +10,8 @@ def profit_calculator(predicted_odds1, predicted_odds_2, return_multiplier, resu
     for i in range(len(predicted_odds1)):
         for j in range(len(predicted_odds1[i])):
 
-            if (1.05 < predicted_odds1[i][j] * return_multiplier[i][j] < 1.20 and (j == 0 or j == 2) and 2 < return_multiplier[i][j] < 4) or \
-                    (1.05 < predicted_odds_2[i][j] * return_multiplier[i][j] < 1.15 and (j == 0 or j == 2) and 1.4 < return_multiplier[i][j]):
+            if (1.05 < predicted_odds1[i][j] * return_multiplier[i][j] and (j == 0 or j == 2)) or \
+                    (1.05 < predicted_odds_2[i][j] * return_multiplier[i][j] and (j == 3) and 1.4 < return_multiplier[i][j]):
                 matches += 1
 
                 if j == result[i]:

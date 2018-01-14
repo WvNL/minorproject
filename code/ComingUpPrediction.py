@@ -67,7 +67,5 @@ print(calcodds2)
 
 for i in range(len(calcodds1)):
     for j in range(len(calcodds1[i])):
-        print(new_matches[-1], j)
-
-        if 1 < calcodds2[i][j] * return_multiplier[i][j]:
+        if 1.05 < calcodds2[i][j] * return_multiplier[i][j]:
             print(match_names[i], j)
