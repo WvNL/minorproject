@@ -1,15 +1,17 @@
-import urllib.request
+import requests
 import bs4
 import time
 
 
+# Function for scraping. Basically one scrape copy-pasted 9 times, because automating it wasn't possible in this case.
 def coming_matches():
     all_stats = []
     # home
     stats = []
     url = "https://sofifa.com/team/245?v=18&e=158967&set=true"
-    home = urllib.request.urlopen(url).read()
-    soup = bs4.BeautifulSoup(home, 'html.parser')
+
+    home = requests.get(url)
+    soup = bs4.BeautifulSoup(home.text, 'html.parser')
     home_team_attributes = soup.find_all(class_="float-right")
 
     player_stats = soup.find_all(class_="col-digit col-oa")
@@ -20,9 +22,9 @@ def coming_matches():
     time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/246?v=18&e=158967&set=true"
-    away = urllib.request.urlopen(url).read()
+    away = requests.get(url)
 
-    soup = bs4.BeautifulSoup(away, 'html.parser')
+    soup = bs4.BeautifulSoup(away.text, 'html.parser')
     away_team_attributes = soup.find_all(class_="float-right")
     player_stats = soup.find_all(class_="col-digit col-oa")
 
@@ -51,8 +53,8 @@ def coming_matches():
     # Fc utrecht -az
     stats = []
     url = "https://sofifa.com/team/1903"
-    home = urllib.request.urlopen(url).read()
-    soup = bs4.BeautifulSoup(home, 'html.parser')
+    home = requests.get(url)
+    soup = bs4.BeautifulSoup(home.text, 'html.parser')
     home_team_attributes = soup.find_all(class_="float-right")
 
     player_stats = soup.find_all(class_="col-digit col-oa")
@@ -62,9 +64,9 @@ def coming_matches():
     time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/1906"
-    away = urllib.request.urlopen(url).read()
+    away = requests.get(url)
 
-    soup = bs4.BeautifulSoup(away, 'html.parser')
+    soup = bs4.BeautifulSoup(away.text, 'html.parser')
     away_team_attributes = soup.find_all(class_="float-right")
     player_stats = soup.find_all(class_="col-digit col-oa")
 
@@ -92,8 +94,8 @@ def coming_matches():
     # Roda-Twente
     stats = []
     url = "https://sofifa.com/team/1902"
-    home = urllib.request.urlopen(url).read()
-    soup = bs4.BeautifulSoup(home, 'html.parser')
+    home = requests.get(url)
+    soup = bs4.BeautifulSoup(home.text, 'html.parser')
     home_team_attributes = soup.find_all(class_="float-right")
 
     player_stats = soup.find_all(class_="col-digit col-oa")
@@ -103,9 +105,9 @@ def coming_matches():
     time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/1908"
-    away = urllib.request.urlopen(url).read()
+    away = requests.get(url)
 
-    soup = bs4.BeautifulSoup(away, 'html.parser')
+    soup = bs4.BeautifulSoup(away.text, 'html.parser')
     away_team_attributes = soup.find_all(class_="float-right")
     player_stats = soup.find_all(class_="col-digit col-oa")
 
@@ -133,8 +135,8 @@ def coming_matches():
     # Zwolle-NAC
     stats = []
     url = "https://sofifa.com/team/1914"
-    home = urllib.request.urlopen(url).read()
-    soup = bs4.BeautifulSoup(home, 'html.parser')
+    home = requests.get(url)
+    soup = bs4.BeautifulSoup(home.text, 'html.parser')
     home_team_attributes = soup.find_all(class_="float-right")
 
     player_stats = soup.find_all(class_="col-digit col-oa")
@@ -144,9 +146,9 @@ def coming_matches():
     time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/1904"
-    away = urllib.request.urlopen(url).read()
+    away = requests.get(url)
 
-    soup = bs4.BeautifulSoup(away, 'html.parser')
+    soup = bs4.BeautifulSoup(away.text, 'html.parser')
     away_team_attributes = soup.find_all(class_="float-right")
     player_stats = soup.find_all(class_="col-digit col-oa")
 
@@ -174,8 +176,8 @@ def coming_matches():
     # ADO-VVV
     stats = []
     url = "https://sofifa.com/team/650"
-    home = urllib.request.urlopen(url).read()
-    soup = bs4.BeautifulSoup(home, 'html.parser')
+    home = requests.get(url)
+    soup = bs4.BeautifulSoup(home.text, 'html.parser')
     home_team_attributes = soup.find_all(class_="float-right")
 
     player_stats = soup.find_all(class_="col-digit col-oa")
@@ -185,9 +187,9 @@ def coming_matches():
     time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/100651"
-    away = urllib.request.urlopen(url).read()
+    requests.get(url)
 
-    soup = bs4.BeautifulSoup(away, 'html.parser')
+    soup = bs4.BeautifulSoup(away.text, 'html.parser')
     away_team_attributes = soup.find_all(class_="float-right")
     player_stats = soup.find_all(class_="col-digit col-oa")
 
@@ -215,8 +217,8 @@ def coming_matches():
     # Vitesse-Heerenveen
     stats = []
     url = "https://sofifa.com/team/1909"
-    home = urllib.request.urlopen(url).read()
-    soup = bs4.BeautifulSoup(home, 'html.parser')
+    home = requests.get(url)
+    soup = bs4.BeautifulSoup(home.text, 'html.parser')
     home_team_attributes = soup.find_all(class_="float-right")
 
     player_stats = soup.find_all(class_="col-digit col-oa")
@@ -226,9 +228,9 @@ def coming_matches():
     time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/1913"
-    away = urllib.request.urlopen(url).read()
+    away = requests.get(url)
 
-    soup = bs4.BeautifulSoup(away, 'html.parser')
+    soup = bs4.BeautifulSoup(away.text, 'html.parser')
     away_team_attributes = soup.find_all(class_="float-right")
     player_stats = soup.find_all(class_="col-digit col-oa")
 
@@ -256,8 +258,8 @@ def coming_matches():
     # sparta-excelsior
     stats = []
     url = "https://sofifa.com/team/100646"
-    home = urllib.request.urlopen(url).read()
-    soup = bs4.BeautifulSoup(home, 'html.parser')
+    home = requests.get(url)
+    soup = bs4.BeautifulSoup(home.text, 'html.parser')
     home_team_attributes = soup.find_all(class_="float-right")
 
     player_stats = soup.find_all(class_="col-digit col-oa")
@@ -267,9 +269,9 @@ def coming_matches():
     time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/1971"
-    away = urllib.request.urlopen(url).read()
+    away = requests.get(url)
 
-    soup = bs4.BeautifulSoup(away, 'html.parser')
+    soup = bs4.BeautifulSoup(away.text, 'html.parser')
     away_team_attributes = soup.find_all(class_="float-right")
     player_stats = soup.find_all(class_="col-digit col-oa")
 
@@ -297,8 +299,8 @@ def coming_matches():
     # willem2-Groningen
     stats = []
     url = "https://sofifa.com/team/1907"
-    home = urllib.request.urlopen(url).read()
-    soup = bs4.BeautifulSoup(home, 'html.parser')
+    home = requests.get(url)
+    soup = bs4.BeautifulSoup(home.text, 'html.parser')
     home_team_attributes = soup.find_all(class_="float-right")
 
     player_stats = soup.find_all(class_="col-digit col-oa")
@@ -308,9 +310,9 @@ def coming_matches():
     time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/1915"
-    away = urllib.request.urlopen(url).read()
+    requests.get(url)
 
-    soup = bs4.BeautifulSoup(away, 'html.parser')
+    soup = bs4.BeautifulSoup(away.text, 'html.parser')
     away_team_attributes = soup.find_all(class_="float-right")
     player_stats = soup.find_all(class_="col-digit col-oa")
 
@@ -338,8 +340,8 @@ def coming_matches():
     # Heracles-psv
     stats = []
     url = "https://sofifa.com/team/100634"
-    home = urllib.request.urlopen(url).read()
-    soup = bs4.BeautifulSoup(home, 'html.parser')
+    home = requests.get(url)
+    soup = bs4.BeautifulSoup(home.text, 'html.parser')
     home_team_attributes = soup.find_all(class_="float-right")
 
     player_stats = soup.find_all(class_="col-digit col-oa")
@@ -349,9 +351,9 @@ def coming_matches():
     time.sleep(0.5)
     # away
     url = "https://sofifa.com/team/247"
-    away = urllib.request.urlopen(url).read()
+    away = requests.get(url)
 
-    soup = bs4.BeautifulSoup(away, 'html.parser')
+    soup = bs4.BeautifulSoup(away.text, 'html.parser')
     away_team_attributes = soup.find_all(class_="float-right")
     player_stats = soup.find_all(class_="col-digit col-oa")
 
@@ -376,6 +378,3 @@ def coming_matches():
 
     all_stats.append(stats)
     return all_stats
-
-
-

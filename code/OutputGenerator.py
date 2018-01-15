@@ -1,6 +1,8 @@
 from DatabaseExtractor import read_data
 
 
+# This file is for processing which team has won from the goals that have been made.
+
 def process_output():
     data = read_data("Match_DEF", "home_team_goal, away_team_goal")
     new_output = []

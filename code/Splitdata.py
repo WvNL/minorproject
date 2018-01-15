@@ -1,37 +1,16 @@
-from DatabaseExtractor import *
-from sklearn.multiclass import OneVsRestClassifier
 from OutputGenerator import *
 from sklearn.linear_model import LogisticRegression
-from sklearn.svm import LinearSVC
 from sklearn import svm
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.naive_bayes import *
-from sklearn.preprocessing import StandardScaler
-from sklearn.datasets import make_moons, make_circles, make_classification
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.gaussian_process.kernels import RBF
-
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-
-from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
-
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, AdaBoostClassifier
 from sklearn.metrics import confusion_matrix
-from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
-from sklearn.utils import compute_class_weight
-from sklearn.metrics import roc_curve, auc
-from sklearn.preprocessing import label_binarize
-from scipy import interp
 
 
+# This file is basically a copy of the main file, but with the class weight added into the prediction algorithms. This file is basically for comparison with the main file. See main file for further explanation.
 
-# Read in the data of the match and of the players
-#                             "H_buildUpPlaySpeed, H_buildUpPlayPassing, H_chanceCreationPassing, H_chanceCreationCrossing, H_chanceCreationShooting, H_defencePressure, H_defenceAggression, H_defenceTeamWidth, "
-#                             "A_buildUpPlaySpeed, A_buildUpPlayPassing, A_chanceCreationPassing, A_chanceCreationCrossing, A_chanceCreationShooting, A_defencePressure, A_defenceAggression, A_defenceTeamWidth
 x2 = read_data("Match_DEF", "H_rating1, H_rating2, H_rating3, H_rating4, H_rating5, H_rating6, H_rating7, H_rating8, H_rating9, H_rating10, H_rating11, "
                             "A_rating1, A_rating2, A_rating3, A_rating4, A_rating5, A_rating6, A_rating7, A_rating8, A_rating9, A_rating10, A_rating11, "
                             "H_buildUpPlaySpeed, H_buildUpPlayPassing, H_chanceCreationPassing, H_chanceCreationCrossing, H_chanceCreationShooting, H_defencePressure, H_defenceAggression, H_defenceTeamWidth, "
@@ -81,13 +60,6 @@ print(multi_naive_bayes.score(x_test, y_test))
 print(bernoulli_naive_bayes.score(x_test, y_test))
 
 
-
-#seems good, gives changing results
-#one_vs_rest = OneVsRestClassifier(estimator=).fit(x_train, y_train).score(x_test, y_test)
-#print("One vs. Rest")
-#print(one_vs_rest)
-
-gradient_boosting = GradientBoostingClassifier()
 gradient_boosting_fit = GradientBoostingClassifier().fit(x_train,y_train)
 print("Gradient Boosting")
 print(gradient_boosting_fit.score(x_test, y_test))
@@ -133,13 +105,6 @@ mlp = MLPClassifier()
 print(mlp.fit(x_train, y_train).score(x_test, y_test))
 
 
-# weirdly enough, theoretically only these matter:
-# "H_rating4, H_rating6, H_rating7, H_rating8, H_rating9,  "
-#                             "A_rating2, A_rating3, A_rating4, A_rating5, A_rating6, A_rating7, A_rating8, A_rating11, "
-#                             "H_chanceCreationCrossing, A_chanceCreationCrossing, A_defenceAggression")
-
-# Algorithm to calculate if there is profit to be made
-####
 calcodds = ada_classifier.predict_proba(x_test[:3000])
 odds = []
 for i in range(3000):
@@ -167,8 +132,4 @@ for i in range(len(calcodds)):
 print(profit, "in ", matches, "matches")
 print("profit per match:" + str(profit/matches))
 print(wrong, "vs", correct)
-####
-# Above is basically this
-# if odds*bwinodds>100 percent:
-#     if correct: result+=1*bwinodds
-#     if not correct: result-=1
+

@@ -1,5 +1,6 @@
 import sqlite3
 
+# This file contains the method used to read in the data from the SQLite file.
 
 # Read in Data from table, row
 def read_data(table, row):

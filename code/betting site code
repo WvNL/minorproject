@@ -1,3 +1,5 @@
+File used for storing some usefull data, like how the betting site data and team data are called in the database
+
 bet365 = "B365H, B365D, B365A"
 blue_square = "BSH, BSD, BSA"
 gamebookers = "GBH, GBD, GBA"
@@ -10,3 +12,15 @@ stan_james = "SJH, SJD, SJA"
 stanleybet = "SYH, SYD, SYA"
 vc_bet = "VCH, CCD, VCA"
 william_hill = "WHH, WHD, WHA"
+
+ Read in the data of the match and of the players
+                             "H_buildUpPlaySpeed, H_buildUpPlayPassing, H_chanceCreationPassing, H_chanceCreationCrossing, H_chanceCreationShooting, H_defencePressure, H_defenceAggression, H_defenceTeamWidth, "
+                             "A_buildUpPlaySpeed, A_buildUpPlayPassing, A_chanceCreationPassing, A_chanceCreationCrossing, A_chanceCreationShooting, A_defencePressure, A_defenceAggression, A_defenceTeamWidth
+
+workin bttin sites = "B365H, B365D, B365A, BWH, BWD, BWA, IWH, IWD, IWA, LBH, LBD, LBA")
+
+
+# weirdly enough, theoretically only these matter:
+    # "H_rating4, H_rating6, H_rating7, H_rating8, H_rating9,  "
+    #                             "A_rating2, A_rating3, A_rating4, A_rating5, A_rating6, A_rating7, A_rating8, A_rating11, "
+    #                             "H_chanceCreationCrossing, A_chanceCreationCrossing, A_defenceAggression")

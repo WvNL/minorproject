@@ -1,7 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+# This document contains the methods for profit calculation and optimization.
 
+# Method for profit calculation. Pretty straight forward, if the expected return (predicted_odds1[i][j] * return_multiplier[i][j]) is bigger than some percentage (atleast 100%), then we bet on that team/game.
+# There are different kinds of requisites possible to add to the criteria for whether or not to bet on a game. In this case we have j==0 and j==2, meaning that we only bet on home(j==0) or away(j==2) team wins,
+# not draw(j==1)
 def profit_calculator(predicted_odds1, return_multiplier, result):
     matches = 0
     profit = 0
@@ -10,7 +14,7 @@ def profit_calculator(predicted_odds1, return_multiplier, result):
     for i in range(len(predicted_odds1)):
         for j in range(len(predicted_odds1[i])):
 
-            if 1.10 < predicted_odds1[i][j] * return_multiplier[i][j]  and (j == 0 or j == 2):
+            if 1.10 < predicted_odds1[i][j] * return_multiplier[i][j] and (j == 0 or j == 2):
                 matches += 1
 
                 if j == result[i]:
@@ -26,7 +30,10 @@ def profit_calculator(predicted_odds1, return_multiplier, result):
     print(correct, "vs", wrong)
     return profit, matches
 
-# Average profit per range (so relative profit)
+# The following 4 functions are functions that plot the profit per range. In the first 2 this is the expected return range, one showing the total profit, and the other the relative profit per match.
+# In the second 2 this is the return_multiplier range, and again one total and one relative.
+
+# Average profit per expected return range (so relative profit)
 def expected_return_pm(predicted_odds, return_multiplier, result):
     lower_bound = 0.7
     upper_bound = 0.75
@@ -104,7 +111,7 @@ def expected_return_pm(predicted_odds, return_multiplier, result):
     plt.show()
 
 
-# Total Profit per range
+# Total Profit per expected return range
 def expected_return_total(predicted_odds, return_multiplier, result):
     lower_bound = 0.7
     upper_bound = 0.75
