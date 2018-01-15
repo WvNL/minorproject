@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def profit_calculator(predicted_odds1, predicted_odds_2, return_multiplier, result):
+def profit_calculator(predicted_odds1, return_multiplier, result):
     matches = 0
     profit = 0
     wrong = 0
@@ -10,8 +10,7 @@ def profit_calculator(predicted_odds1, predicted_odds_2, return_multiplier, resu
     for i in range(len(predicted_odds1)):
         for j in range(len(predicted_odds1[i])):
 
-            if (1.05 < predicted_odds1[i][j] * return_multiplier[i][j] and (j == 0 or j == 2)) or \
-                    (1.05 < predicted_odds_2[i][j] * return_multiplier[i][j] and (j == 3) and 1.4 < return_multiplier[i][j]):
+            if 1.10 < predicted_odds1[i][j] * return_multiplier[i][j]  and (j == 0 or j == 2):
                 matches += 1
 
                 if j == result[i]:
@@ -25,7 +24,7 @@ def profit_calculator(predicted_odds1, predicted_odds_2, return_multiplier, resu
     print(profit, "in ", matches, "matches")
     print("average profit per match:" + str(profit / matches))
     print(correct, "vs", wrong)
-
+    return profit, matches
 
 # Average profit per range (so relative profit)
 def expected_return_pm(predicted_odds, return_multiplier, result):

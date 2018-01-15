@@ -28,7 +28,7 @@ from sklearn.utils import compute_class_weight
 from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize
 from scipy import interp
-
+from sklearn.model_selection import KFold
 
 
 # Read in the data of the match and of the players
@@ -37,7 +37,7 @@ from scipy import interp
 x2 = read_data("Match_DEF", "H_rating1, H_rating2, H_rating3, H_rating4, H_rating5, H_rating6, H_rating7, H_rating8, H_rating9, H_rating10, H_rating11, "
                             "A_rating1, A_rating2, A_rating3, A_rating4, A_rating5, A_rating6, A_rating7, A_rating8, A_rating9, A_rating10, A_rating11, "
                             "H_chanceCreationCrossing, H_defencePressure, H_defenceAggression, A_chanceCreationCrossing, A_defencePressure, A_defenceAggression, "
-                            "B365H, B365D, B365A")
+                            "B365H, B365D, B365A" )
 
 # workin bttin sits = "B365H, B365D, B365A, BWH, BWD, BWA, IWH, IWD, IWA, LBH, LBD, LBA")
 y = process_output()
@@ -55,94 +55,107 @@ for i in range(21000):
         y1.append(y[i])
 print(len(x))
 
-
-#x = StandardScaler().fit_transform(x)
-# split into training and test
-x_train, x_test, y_train, y_test = train_test_split(x, y1, test_size=0.15, shuffle=True)
-
-# bayes, seems good, 2nd gives constant and 2nd best result
-gnb = GaussianNB()
-gnbfit = gnb.fit(x_train, y_train)
-mnb = MultinomialNB().fit(x_train, y_train)
-bnb = BernoulliNB().fit(x_train, y_train)
+total_matches = 0
+total_profit = 0
 
 
+kf = KFold(n_splits=10)
+
+for train_index, test_index in kf.split(x):
+    # x = StandardScaler().fit_transform(x)
+    # split into training and test
+    # x_train, x_test, y_train, y_test = train_test_split(x, y1, test_size=0.15, shuffle=True)
+
+    ## k-fold split into train and test to test the profit over the whole training set
+    x_train = []
+    x_test = []
+    y_train = []
+    y_test = []
+    for index in train_index:
+        x_train.append(x[index])
+        y_train.append(y1[index])
+
+    for index in test_index:
+        x_test.append(x[index])
+        y_test.append(y1[index])
+    # bayes, seems good, 2nd gives constant and 2nd best result
+    # gnb = GaussianNB()
+    # gnbfit = gnb.fit(x_train, y_train)
+    # mnb = MultinomialNB().fit(x_train, y_train)
+    # bnb = BernoulliNB().fit(x_train, y_train)
+
+    #seems good, gives changing results
+    #clf = OneVsRestClassifier(LinearSVC(class_weight=class_weight))
+    #clf_fit = clf.fit(x_train, y_train).score(x_test, y_test)
+    #print("One vs. Rest")
+    #print(clf_fit)
 
 
-#seems good, gives changing results
-#clf = OneVsRestClassifier(LinearSVC(class_weight=class_weight))
-#clf_fit = clf.fit(x_train, y_train).score(x_test, y_test)
-#print("One vs. Rest")
-#print(clf_fit)
+    # gradient_boosting_fit = GradientBoostingClassifier().fit(x_train, y_train)
+    # print("Gradient Boosting")
+    # print(gradient_boosting_fit.score(x_test, y_test))
 
 
-gradient_boosting_fit = GradientBoostingClassifier().fit(x_train, y_train)
-print("Gradient Boosting")
-print(gradient_boosting_fit.score(x_test, y_test))
+    # adaboosting_fit = AdaBoostClassifier(algorithm= 'SAMME', base_estimator= RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',max_depth=None, max_features='auto', max_leaf_nodes=None,min_impurity_decrease=0.0, min_impurity_split=None,min_samples_leaf=1, min_samples_split=2,min_weight_fraction_leaf=0.0, n_estimators=10, n_jobs=1,oob_score=False, random_state=None, verbose=0,warm_start=False), learning_rate= 0.5, n_estimators= 50).fit(x_train, y_train)
+    # result1 = adaboosting_fit.score(x_test, y_test)
+    # print("Adaboost")
+    # print(result1)
+
+    # seems good, gives constant result, best atm
+    logisticreg_fit = LogisticRegression().fit(x_train,y_train)
+    result2 = logisticreg_fit.score(x_test, y_test)
+    print("logisticregr")
+    print(result2)
+
+    # # seems good, gives close to constant result
+    # clf4 = DecisionTreeClassifier()
+    # decisiontree_fit = clf4.fit(x_train, y_train)
+    # print("decisiontree")
+    # print(decisiontree_fit.score(x_test, y_test))
+    # #
+    # # seems good, gives changing results
+    # clf3 = svm.LinearSVC()
+    # clf3p = clf3.fit(x_train, y_train)
+    # print("linearsvc")
+    # print(clf3p.score(x_test, y_test))
+    #
+    # # seems medium, gives changing results
+    # mlp = MLPClassifier()
+    # print("mlp")
+    # print(mlp.fit(x_train, y_train).score(x_test, y_test))
+    # mlp = MLPClassifier()
+    # print("mlp")
+    # print(mlp.fit(x_train, y_train).score(x_test, y_test))
+    # mlp = MLPClassifier()
+    # print("mlp")
+    # print(mlp.fit(x_train, y_train).score(x_test, y_test))
+
+    # weirdly enough, theoretically only these matter:
+    # "H_rating4, H_rating6, H_rating7, H_rating8, H_rating9,  "
+    #                             "A_rating2, A_rating3, A_rating4, A_rating5, A_rating6, A_rating7, A_rating8, A_rating11, "
+    #                             "H_chanceCreationCrossing, A_chanceCreationCrossing, A_defenceAggression")
+
+    # Algorithm to calculate if there is profit to be made
+    ###
+    calcodds = logisticreg_fit.predict_proba(x_test[:len(x_test)])
+    result = y_test[:2800]
+
+    return_multiplier = []
+    for i in range(len(x_test)):
+        return_multiplier.append(x_test[i][-3:])
 
 
-adaboosting_fit = AdaBoostClassifier().fit(x_train, y_train)
-result1 = adaboosting_fit.score(x_test, y_test)
-print("Adaboost")
-print(result1)
 
-# seems good, gives constant result, best atm
-logisticreg_fit = LogisticRegression().fit(x_train,y_train)
-result2 = logisticreg_fit.score(x_test, y_test)
-print("logisticregr")
-print(result2)
+    # profit visualization
+    # expected_return_pm(calcodds, return_multiplier, result)
+    # expected_return_total(calcodds, return_multiplier, result)
+    # multiplier_return_average(calcodds, return_multiplier, result)
+    # multiplier_return_total(calcodds, return_multiplier, result)
 
-# print(otherclf.get_params(deep=True))
-#
-# # seems good, gives close to constant result
-# clf4 = DecisionTreeClassifier()
-# model4 = clf4.fit(x_train, y_train)
-# result3 = model4.predict(x_test)
-# print("decisiontree")
-# print(model4.score(x_test, y_test))
-#
-# # seems good, gives changing results
-# clf3 = svm.LinearSVC()
-# clf3p = clf3.fit(x_train, y_train)
-# print("linearsvc")
-# print(clf3p.score(x_test, y_test))
-#
-# # seems medium, gives changing results
-# mlp = MLPClassifier()
-# print("mlp")
-# print(mlp.fit(x_train, y_train).score(x_test, y_test))
-# mlp = MLPClassifier()
-# print("mlp")
-# print(mlp.fit(x_train, y_train).score(x_test, y_test))
-# mlp = MLPClassifier()
-# print("mlp")
-# print(mlp.fit(x_train, y_train).score(x_test, y_test))
-
-# weirdly enough, theoretically only these matter:
-# "H_rating4, H_rating6, H_rating7, H_rating8, H_rating9,  "
-#                             "A_rating2, A_rating3, A_rating4, A_rating5, A_rating6, A_rating7, A_rating8, A_rating11, "
-#                             "H_chanceCreationCrossing, A_chanceCreationCrossing, A_defenceAggression")
-
-# Algorithm to calculate if there is profit to be made
-###
-calcodds1 = logisticreg_fit.predict_proba(x_test[:2800])
-calcodds2 = gradient_boosting_fit.predict_proba(x_test[:2800])
-result = y_test[:2800]
-
-return_multiplier = []
-for i in range(2800):
-    return_multiplier.append(x_test[i][-3:])
+    profit, matches = profit_calculator(calcodds, return_multiplier, result)
+    total_profit += profit
+    total_matches += matches
+    print(profit)
 
 
-matches = 0
-profit = 0
-wrong = 0
-correct = 0
-
-# profit visualization
-expected_return_pm(calcodds1, return_multiplier, result)
-expected_return_total(calcodds1, return_multiplier, result)
-multiplier_return_average(calcodds1, return_multiplier, result)
-multiplier_return_total(calcodds1, return_multiplier, result)
-
-profit_calculator(calcodds1, calcodds2, return_multiplier, result)
+print(total_profit/total_matches)
