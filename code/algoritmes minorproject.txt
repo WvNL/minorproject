@@ -1,0 +1,144 @@
+Overall_rating_player_x
+potential_player_x
+
+build_up_speed
+build_up_play_passing
+chance_creation_passing
+chance_creation_crossing
+chance_creation_shooting
+defence_pressure
+defence_aggression
+defence_team_width
+
+Home/Away
+
+select a.id as match_id, a.date1 as date, a.hp1_id, min(a.date_dif), a.overall_rating as hp1_overall_rating, a.potential as hp1_potential from (
+select m.id as id, m.date as date1, p.date as date2, abs(m.date - p.date) as date_dif, home_player_1 as hp1_id, overall_rating, potential
+from Match as m, Player_Attributes as p
+where home_player_1 == player_api_id
+) as a
+group by a.date1, a.hp1_id
+
+INSERT INTO `hp3_ratings`
+select a.id as match_id, a.date1 as date, 
+a.player_id, a.overall_rating as overall_rating, potential from (
+select m.id as id, m.date as date1, p.date as date2, 
+
+min(abs(m.date - p.date)) as date_dif, 
+
+home_player_3 as player_id, overall_rating, potential
+from Match as m, Player_Attributes as p
+where player_id == player_api_id
+group by date1, player_id
+) as a
+
+
+CREATE TABLE "hp1_ratings" ( `match_id` INTEGER, `date` TEXT, `player_id` INTEGER, `overall_rating` INTEGER, `potential` INTEGER )
+
+select a.match_id, a.date, a.player_id as hp1_id, a.overall_rating as hp1_or, a.potential as hp1_po,
+ b.player_id as hp2_id, b.overall_rating as hp2_or, b.potential as hp2_po
+ c.player_id as hp3_id, c.overall_rating as hp3_or, c.potential as hp3_po
+ 
+ 
+from hp1_ratings as a, hp2_ratings as b, hp3_ratings as c
+where a.match_id == b.match_id == c.match_id
+
+
+select a.match_id, a.date, a.pid1, a.rating1, a.po1, a.pid2, a.rating2, a.po2, b.player_id as pid3, b.overall_rating as rating 3, b.potential as po3
+select a.match_id, a.date, a.player_id as pid1, a.overall_rating as rating1, a.potential as po1, b.player_id as pid2, b.overall_rating as rating2, b.potential as po2
+from hp1_ratings as a, hp2_ratings as b
+where a.match_id = b.match_id) as a, hp3_ratings as b
+where a.match_id = b.match_id
+
+
+INSERT INTO `hp1-3_ratings`(`match_id`,`date`,`pid1`,`rating1`,`po1`,`pid2`,`rating2`,`po2`,`pid3`,`rating3`,`po3`)
+select a.match_id as match_id, a.date as date, pid1, rating1, po1, pid2, rating2, po2, b.player_id as pid3, b.overall_rating as rating3, b.potential as po3
+from(
+select a.match_id, a.date, a.player_id as pid1, a.overall_rating as rating1, a.potential as po1, b.player_id as pid2, b.overall_rating as rating2, b.potential as po2
+from hp1_ratings as a, hp2_ratings as b
+where a.match_id = b.match_id) as a, hp3_ratings as b
+where a.match_id = b.match_id
+
+
+---------------------------------------
+INSERT INTO `hp1_3_ratings`
+select a.match_id as match_id, a.date as date, pid1, rating1, po1, pid2, rating2, po2, b.player_id as pid3, b.overall_rating as rating3, b.potential as po3
+from(
+select a.match_id, a.date, a.player_id as pid1, a.overall_rating as rating1, a.potential as po1, b.player_id as pid2, b.overall_rating as rating2, b.potential as po2
+from hp1_ratings as a, hp2_ratings as b
+where a.match_id = b.match_id) as a, hp3_ratings as b
+where a.match_id = b.match_id
+
+INSERT INTO `hp4_6_ratings`
+select a.match_id as match_id, a.date as date, pid4, rating4, po4, pid5, rating5, po5, b.player_id as pid6, b.overall_rating as rating6, b.potential as po6
+from(
+select a.match_id, a.date, a.player_id as pid4, a.overall_rating as rating4, a.potential as po4, b.player_id as pid5, b.overall_rating as rating5, b.potential as po5
+from hp4_ratings as a, hp5_ratings as b
+where a.match_id = b.match_id) as a, hp6_ratings as b
+where a.match_id = b.match_id
+
+INSERT INTO `hp7_9_ratings`
+select a.match_id as match_id, a.date as date, pid7, rating7, po7, pid8, rating8, po8, b.player_id as pid9, b.overall_rating as rating9, b.potential as po9
+from(
+select a.match_id, a.date, a.player_id as pid7, a.overall_rating as rating7, a.potential as po7, b.player_id as pid8, b.overall_rating as rating8, b.potential as po8
+from hp7_ratings as a, hp8_ratings as b
+where a.match_id = b.match_id) as a, hp9_ratings as b
+where a.match_id = b.match_id
+
+INSERT INTO `hp10_11_ratings`
+select a.match_id, a.date, a.player_id as pid10, a.overall_rating as rating10, a.potential as po10, b.player_id as pid11, b.overall_rating as rating11, b.potential as po11
+from hp10_ratings as a, hp11_ratings as b
+where a.match_id = b.match_id
+
+
+INSERT INTO `hp1_6_ratings`
+select a.match_id, a.date, pid1, rating1, po1, pid2, rating2, po2, pid3, rating3, po3
+, pid4, rating4, po4, pid5, rating5, po5
+, pid6, rating6, po6
+from hp1_3_ratings as a, hp4_6_ratings as b
+where a.match_id == b.match_id
+
+
+INSERT INTO `hp7_11_ratings`
+select a.match_id, a.date, rating7, po7
+, pid8, rating8, po8, pid9, rating9, po9
+, pid11, rating11, po11, pid11, rating11, po11
+from hp7_9_ratings as a, hp10_11_ratings as b
+where a.match_id == b.match_id
+
+
+
+INSERT INTO `ap_ratings`
+select a.match_id, a.date, pid1, rating1, po1
+, pid2, rating2, po2, pid3, rating3, po3
+, pid4, rating4, po4, pid5, rating5, po5
+, pid6, rating6, po6, pid7, rating7, po7
+, pid8, rating8, po8, pid9, rating9, po9
+, pid11, rating11, po11, pid11, rating11, po11
+from hp1_6_ratings as a, hp7_11_ratings as b
+where a.match_id == b.match_id
+
+-----------------------------------------------------
+TEAMS
+
+select id as match_id, date1 as date, 
+team_api_id, buildUpPlaySpeed, buildUpPlayDribbling, buildUpPlayPassing, chanceCreationPassing, chanceCreationCrossing, chanceCreationShooting, 
+defencePressure, defenceAggression, defenceTeamWidth from(
+select m.id as id, m.date as date1, t.date as date2, min(abs(m.date - t.date)) as date_dif,
+team_api_id, buildUpPlaySpeed, buildUpPlayDribbling, buildUpPlayPassing, chanceCreationPassing, chanceCreationCrossing, chanceCreationShooting, 
+defencePressure, defenceAggression, defenceTeamWidth
+from Match as m, Team_AttributesShort as t
+where t.team_api_id == m.home_team_api_id
+group by date1, t.team_api_id)
+
+
+select h.match_id, h.date, h.team_api_id, h.buildUpPlaySpeed, h.buildUpPlayDribbling, h.buildUpPlayPassing, h.chanceCreationPassing, 
+h.chanceCreationCrossing, h.chanceCreationShooting, h.defencePressure, h.defenceAggression, h.defenceTeamWidth
+a.team_api_id, a.buildUpPlaySpeed, a.buildUpPlayDribbling, a.buildUpPlayPassing, a.chanceCreationPassing, a.chanceCreationCrossing,
+ a.chanceCreationShooting, a.defencePressure, a.defenceAggression, a.defenceTeamWidth
+ from Team_AttributesHome as h. Team_AttributesAway as a
+ where h.match_id = a.match_id
+
+INSERT INTO player_ratingsAll
+select * from hp_ratings as h, ap_ratings as a
+where h.match_id == a.match_id
